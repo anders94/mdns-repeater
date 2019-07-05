@@ -604,16 +604,13 @@ int main(int argc, char *argv[]) {
 				}
 			}
 
-			if (foreground)
-				printf("data from=%s size=%zd\n", inet_ntoa(fromaddr.sin_addr), recvsize);
-
 			for (j = 0; j < num_socks; j++) {
 				// do not repeat packet back to the same network from which it originated
 				if ((fromaddr.sin_addr.s_addr & socks[j].mask.s_addr) == socks[j].net.s_addr)
 					continue;
 
 				if (foreground)
-					printf("repeating data to %s\n", socks[j].ifname);
+				  printf("%s (%zd bytes) -> %s\n", inet_ntoa(fromaddr.sin_addr), recvsize, socks[j].ifname);
 
 				// repeat data
 				ssize_t sentsize = send_packet(socks[j].sockfd, pkt_data, (size_t) recvsize);
